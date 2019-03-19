@@ -1,1 +1,103 @@
-<!-- KeyStone -->
+<!DOCTYPE html>
+<html {{ with .Site.LanguageCode }} lang="{{- . -}}"{{ end }}>
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+
+        {{ with .Permalink }}
+            <link rel="canonical" href="{{- . -}}" />
+        {{ end }}
+
+        {{ if eq .IsHome false }}
+            <title>{{- .Title -}} | {{- .Site.Title -}}</title>
+        {{ else }}
+            <title>{{- .Site.Params.Info.homeTitle -}}</title>
+        {{ end }}
+
+        {{ if .Site.Params.rss }}
+            <link rel="alternate" type="application/rss+xml" href="{{ .Site.RSSLink }}" title="RSS feed for {{ .Site.Title }}" />
+        {{ end }}
+
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap-reboot.min.css" crossorigin="anonymous">
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap-grid.min.css" crossorigin="anonymous">
+
+        
+        {{ $options := (dict "targetPath" "style.css" "outputStyle" "compressed" "enableSourceMap" true) }}
+        {{ $style := resources.Get "scss/styles.scss" | resources.ToCSS $options | resources.Fingerprint "sha512" }}
+        <!-- {{ with $style.Permalink }}<link rel="stylesheet" href="{{ . }}">{{ end }} -->
+        <!-- <link href="https://fonts.googleapis.com/css?family=Imprima|Open+Sans:400,400i|Source+Code+Pro" rel="stylesheet"> -->
+        <style>
+            html body {
+                display: none;
+            }
+
+            html.wf-inactive body,
+            html.wf-active body {
+                display: block;
+            }
+
+            html.wf-active body {
+                font-family: 'Open Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+            }
+
+            html.wf-active h1, html.wf-active h2, html.wf-active h3, html.wf-active h4, html.wf-active h5, html.wf-active h6 {
+                font-family: 'Imprima', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+            }
+        </style>
+        
+    </head>
+    <body>
+        <header>
+            <nav>
+
+            </nav>
+        </header>
+        <main class="container" role="main">
+            <article>
+                <header>
+                    <h1>Some title</h1>
+                    <p>Posted on Wednesday, 4 October 2017 by Jane Smith</p>
+                </header>
+                <p>We live on a planet that's blue and <i>gasreen</i>, with so many things still unseen.</p>
+            </article>
+        </main>
+        <footer class="container center-text footer-info">
+            <p>{{ .Site.Copyright | safeHTML }}</p>
+            {{if .Site.Params.Info.poweredby}}
+                <p>Powered by <a href="https://gohugo.io/">Hugo</a> &amp; <a href="https://github.com/ribice/kiss">Kiss</a>.</p>
+            {{ end }}
+        </footer>
+
+        <!-- Use Google's WebFontLoader to load required fonts asynchronously. -->
+        <script src="https://ajax.googleapis.com/ajax/libs/webfont/1.6.26/webfont.js"></script>
+        <script>
+            WebFont.load({
+                classes: true,
+                events: false,
+                timeout: 2000,
+                google: {
+                    families: ['Imprima', 'Open Sans:400,400i', 'Source Code Pro']
+                }
+            });
+        </script>
+
+        <!-- Use Google's WebFontLoader asynchronously, and use it to load required fonts asynchronously. -->
+        <!-- <script>
+            WebFontConfig = {
+                classes: true,
+                events: false,
+                timeout: 2000,
+                google: {
+                    families: ['Imprima', 'Open Sans:400,400i', 'Source Code Pro']
+                }
+            };
+            
+            (function(d) {
+                var wf = d.createElement('script'), s = d.scripts[0];
+                wf.src = 'https://ajax.googleapis.com/ajax/libs/webfont/1.6.26/webfont.js';
+                wf.async = true;
+                s.parentNode.insertBefore(wf, s);
+            })(document);
+        </script> -->
+    </body>
+</html>
