@@ -27,36 +27,35 @@
         {{ with $style.Permalink }}<link rel="stylesheet" href="{{ . }}">{{ end }}    
     </head>
     <body>
-        <header>
-            <nav>
-
-            </nav>
+        <header class="blog-header">
+            <div class="container">
+                <nav>
+                    <a rel="page" class="blog-title" href="/">{{- .Site.Title -}}</a>
+                </nav>
+            </div>
         </header>
-        <main class="container" role="main">
-            <article>
-                <header>
-                    <h1>Some title</h1>
-                    <p>Posted on Wednesday, 4 October 2017 by Jane Smith</p>
-                </header>
-                <p>We live on a planet that's blue and <i>gasreen</i>, with so many things still unseen.</p>
-                <code class="code">
-                    #!/usr/bin/python3
-
-                    from engine import RunForrestRun
-                    
-                    """Test code for syntax highlighting!"""
-                    
-                    class Foo:
-                        def __init__(self, var):
-                            self.var = var
-                            self.run()
-                    
-                        def run(self):
-                            RunForrestRun()  # run along!
-                </code>
-            </article>
+        <main role="main">
+            <div class="container" role="feed">
+                {{ $paginator := .Paginate (where .Pages "Params.hidden" "ne" true) }}
+                {{ range sort .Paginator.Pages }}
+                    <article role="listitem" class="post-summary">
+                        <header>
+                            <h1><a href="{{ .Permalink }}">{{ .Title }}</a>{{ if .Draft }} ::Draft{{ end }}</h1>
+                            <time role="" class="time is-6">Posted on {{ .Date.Format "January 2, 2006" }}</time>
+                        </header>
+                        <div class="content">
+                            {{ .Summary | plainify | safeHTML }}
+                            {{ if .Truncated }}
+                                <a class="button is-link" href="{{ .Permalink }}" style="height:28px">
+                                    Read more
+                                </a>
+                            {{ end }}
+                        </div>
+                    </article>
+                {{ end }}
+            </div>
         </main>
-        <footer class="container center-text footer-info">
+        <footer class="container center-text footer-info blog-footer">
             <p>{{ .Site.Copyright | safeHTML }}</p>
             {{if .Site.Params.Info.poweredby}}
                 <p>Powered by <a href="https://gohugo.io/">Hugo</a> &amp; <a href="https://github.com/ribice/kiss">Kiss</a>.</p>
