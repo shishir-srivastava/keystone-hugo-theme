@@ -1,0 +1,11 @@
+        <footer class="footer-info blog-footer">
+            <div class="container">
+                <p>{{ .Site.Copyright | safeHTML }}</p>
+                {{if .Site.Params.Info.poweredby}}
+                    <p>Powered by <a href="https://gohugo.io/">Hugo</a> &amp; <a href="https://github.com/shishir-srivastava/keystone-hugo-theme">KeyStone theme</a>.</p>
+                {{ end }}
+            </div>
+        </footer>
+        {{ partial "footer-scripts" . }}
+    </body>
+</html>

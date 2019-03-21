@@ -1,78 +1,25 @@
-<!DOCTYPE html>
-<html {{ with .Site.LanguageCode }} lang="{{- . -}}"{{ end }}>
-    <head>
-        <meta charset="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+{{ partial "head" . }}
 
-        {{ with .Permalink }}
-            <link rel="canonical" href="{{- . -}}" />
+<main role="main">
+    <div class="container" role="feed">
+        {{ $paginator := .Paginate (where .Pages "Params.hidden" "ne" true) }}
+        {{ range sort .Paginator.Pages }}
+            <article role="listitem" class="post-summary">
+                <header>
+                    <h1><a href="{{ .Permalink }}">{{ .Title }}</a>{{ if .Draft }} ::Draft{{ end }}</h1>
+                    <time role="" class="time is-6">Posted on {{ .Date.Format "January 2, 2006" }}</time>
+                </header>
+                <div class="content">
+                    {{ .Summary | plainify | safeHTML }}
+                    {{ if .Truncated }}
+                        <a class="button is-link" href="{{ .Permalink }}" style="height:28px">
+                            Read more
+                        </a>
+                    {{ end }}
+                </div>
+            </article>
         {{ end }}
-
-        {{ if eq .IsHome false }}
-            <title>{{- .Title -}} | {{- .Site.Title -}}</title>
-        {{ else }}
-            <title>{{- .Site.Params.Info.homeTitle -}}</title>
-        {{ end }}
-
-        {{ if .Site.Params.rss }}
-            <link rel="alternate" type="application/rss+xml" href="{{ .Site.RSSLink }}" title="RSS feed for {{ .Site.Title }}" />
-        {{ end }}
-
-        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap-reboot.min.css" crossorigin="anonymous">
-        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap-grid.min.css" crossorigin="anonymous">
-
+    </div>
+</main>
         
-        {{ $options := (dict "targetPath" "style.css" "outputStyle" "compressed" "enableSourceMap" true) }}
-        {{ $style := resources.Get "scss/styles.scss" | resources.ToCSS $options | resources.Fingerprint "sha512" }}
-        {{ with $style.Permalink }}<link rel="stylesheet" href="{{ . }}">{{ end }}    
-    </head>
-    <body>
-        <header class="blog-header">
-            <div class="container">
-                <nav>
-                    <a rel="page" class="blog-title" href="/">{{- .Site.Title -}}</a>
-                </nav>
-            </div>
-        </header>
-        <main role="main">
-            <div class="container" role="feed">
-                {{ $paginator := .Paginate (where .Pages "Params.hidden" "ne" true) }}
-                {{ range sort .Paginator.Pages }}
-                    <article role="listitem" class="post-summary">
-                        <header>
-                            <h1><a href="{{ .Permalink }}">{{ .Title }}</a>{{ if .Draft }} ::Draft{{ end }}</h1>
-                            <time role="" class="time is-6">Posted on {{ .Date.Format "January 2, 2006" }}</time>
-                        </header>
-                        <div class="content">
-                            {{ .Summary | plainify | safeHTML }}
-                            {{ if .Truncated }}
-                                <a class="button is-link" href="{{ .Permalink }}" style="height:28px">
-                                    Read more
-                                </a>
-                            {{ end }}
-                        </div>
-                    </article>
-                {{ end }}
-            </div>
-        </main>
-        <footer class="container center-text footer-info blog-footer">
-            <p>{{ .Site.Copyright | safeHTML }}</p>
-            {{if .Site.Params.Info.poweredby}}
-                <p>Powered by <a href="https://gohugo.io/">Hugo</a> &amp; <a href="https://github.com/ribice/kiss">Kiss</a>.</p>
-            {{ end }}
-        </footer>
-
-        <!-- Use Google's WebFontLoader to load required fonts asynchronously. -->
-        <script src="https://ajax.googleapis.com/ajax/libs/webfont/1.6.26/webfont.js"></script>
-        <script>
-            WebFont.load({
-                classes: true,
-                events: false,
-                timeout: 1000,
-                google: {
-                    families: ['Imprima', 'Open Sans:400,400i']
-                }
-            });
-        </script>
-    </body>
-</html>
+{{ partial "footer" . }}
